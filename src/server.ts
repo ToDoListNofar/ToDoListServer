@@ -15,9 +15,7 @@ const startServer = async () => {
     server.on("error", (err) => {
       console.error("Error creating HTTP server:", err.message);
     });
-  } catch (error) {
-    // console.error("Error initializing app:", error.message);
-  }
+  } catch (error) {}
 };
 
 startServer();
