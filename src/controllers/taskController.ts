@@ -19,7 +19,8 @@ export const addTask = async (req: Request, res: Response): Promise<void> => {
     }
     await createTask({ title, description, completed, user_id });
     res.status(201).json({ message: "Task created successfully" });
-  } catch (error) {
+  } catch (error: unknown) {
+    console.log(error);
     res.status(500).json({ error: "Failed to create task" });
   }
 };

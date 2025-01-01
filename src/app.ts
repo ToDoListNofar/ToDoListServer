@@ -1,10 +1,11 @@
 import express, { Application } from "express";
 import pool from "./db";
 import taskRoutes from "./routes/taskRoutes";
+import cors from "cors";
 
 const initApp = async (): Promise<Application> => {
   const app = express();
-
+  app.use(cors());
   try {
     const connection = await pool.getConnection();
     console.log("Connected to MySQL Database");
