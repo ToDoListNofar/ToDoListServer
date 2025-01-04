@@ -26,4 +26,13 @@ const createTask = async (task: Task): Promise<void> => {
   );
 };
 
-export { getAllTasks, createTask };
+const deleteTask = async (taskId: number): Promise<void> => {
+  try {
+    await pool.query("DELETE FROM tasks WHERE id = ?", [taskId]);
+    console.log(`Task with ID ${taskId} deleted successfully`);
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    throw error;
+  }
+};
+export { getAllTasks, createTask, deleteTask };
