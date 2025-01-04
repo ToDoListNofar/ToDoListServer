@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getAllTasks, createTask } from "../models/taskModel";
+import { getAllTasks, createTask, deleteTask } from "../models/taskModel";
 
 export const getTasks = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -24,20 +24,25 @@ export const addTask = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ error: "Failed to create task" });
   }
 };
-/*
-(async () => {
-  try {
-    const tasks = await getAllTasks();
-    console.log("Tasks fetched successfully:", tasks);
 
-    await createTask({
-      title: "Test Task",
-      description: "This is a test task",
-      completed: false,
-    });
-    console.log("Task created successfully");
-  } catch (error) {
-    console.error("Error in task functions:", error);
+export const removeTask = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      res.status(400).json({ error: "Task ID is required" });
+      return;
+    }
+    if (isNaN(Number(id))) {
+      res.status(400).json({ error: "Task ID must be a valid number" });
+      return;
+    }
+    await deleteTask(Number(id));
+    res.status(200).json({ message: "Task deleted successfully" });
+  } catch (error: unknown) {
+    console.error("Error deleting task:", error);
+    res.status(500).json({ error: "Failed to remove task" });
   }
-})();
-*/
+};
