@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import pool from "./db";
 import taskRoutes from "./routes/taskRoutes";
 import cors from "cors";
+import BaseRouter from "./routes/index";
 
 const initApp = async (): Promise<Application> => {
   const app = express();
@@ -15,12 +16,8 @@ const initApp = async (): Promise<Application> => {
   }
 
   app.use(express.json());
-  /*
-  app.get("/", (req, res) => {
-    res.send("Hello from the app!");
-  });*/
-  app.use("/api/tasks", taskRoutes);
 
+  app.use("/api", BaseRouter);
   return app;
 };
 
