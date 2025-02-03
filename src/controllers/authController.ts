@@ -22,13 +22,7 @@ const registerUser = async (req: Request, res: Response) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
     await createUser({ email, password: hashedPassword, name });
-
-    /* await pool.query(
-      "INSERT INTO users (email, password, name) VALUES (?, ?, ?)",
-      [email, hashedPassword, name || null]
-    );*/
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
@@ -44,10 +38,6 @@ const loginUser = async (req: Request, res: Response) => {
     return;
   }
   try {
-    // const [rows] = await pool.query("SELECT * FROM users WHERE email = ?", [
-    //   email,
-    // ]);
-    // const user = (rows as any[])[0];
     const user = await findUserByEmail(email);
 
     if (!user) {
@@ -64,8 +54,11 @@ const loginUser = async (req: Request, res: Response) => {
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, {
       expiresIn: "1h",
     });
+    console.log("Sending Response:", { token, userId: user.id });
 
-    res.status(200).json({ token, message: "Login successful" });
+    res
+      .status(200)
+      .json({ token, userId: user.id, message: "Login successful" });
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).json({ error: "Failed to login" });

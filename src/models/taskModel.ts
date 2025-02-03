@@ -18,6 +18,17 @@ const getAllTasks = async (): Promise<Task[]> => {
   }
 };
 
+const getUserTasks = async (user_id: string): Promise<Task[]> => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM tasks where user_id = ?", [
+      user_id,
+    ]);
+    return rows as Task[];
+  } catch (error) {
+    console.error("Error fetching user tasks:", error);
+    throw error;
+  }
+};
 const createTask = async (task: Task): Promise<void> => {
   const { title, description, completed, user_id } = task;
   await pool.query(
@@ -57,4 +68,4 @@ const updateTask = async (
     throw new Error("Failed to update task");
   }
 };
-export { getAllTasks, createTask, deleteTask, updateTask };
+export { getAllTasks, getUserTasks, createTask, deleteTask, updateTask };
